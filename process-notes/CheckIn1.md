@@ -8,7 +8,7 @@ Fullstack real-time sensor data visualisation and analytics project.
 
 1 sensor pushing live data to a dynamically updated line chart on browser via public internet-accessible endpoint.
 
-![diylogger mvp1](https://imgur.com/FMJwYnD.gif)
+![diylogger mvp1](https://i.imgur.com/Mkib967.gif)
 
 ## Tech Stack v1.0
 
