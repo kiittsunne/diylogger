@@ -1,0 +1,31 @@
+//package com.jdsg.datalogger.controllers;
+//
+//import com.jdsg.datalogger.dto.ChartData;
+//import com.jdsg.datalogger.dto.ChatMessage;
+//import org.springframework.messaging.handler.annotation.MessageMapping;
+//import org.springframework.messaging.handler.annotation.SendTo;
+//import org.springframework.stereotype.Controller;
+//
+//@Controller
+//public class WebSocketController {
+//
+////    @MessageMapping("/ws")
+////    @SendTo("/topic/chartData")
+////    public ChartData updateChart(ChartData data) {
+////        // Process and return the data
+////        System.out.println(data.toString());
+////        return data;
+////    }
+//
+//    @Controller
+//    public class ChatController {
+//
+//        @MessageMapping("/chart") // This endpoint handles messages with "/app/chat" prefix
+//        @SendTo("/topic/data") // Send the response to "/topic/messages" for broadcasting
+//        public ChartData send(ChartData data) {
+//            return data;
+//        }
+//    }
+//
+//
+//}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WebSocket Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+  </head>
+  <body>
+    <h1>WebSocket Test</h1>
+    <div>
+      <!-- Earlier version with a form to troubleshoot ws connection
+        <form id="messageForm">
+        <input
+          type="text"
+          id="messageInput"
+          placeholder="Enter your message..."
+        />
+        <button type="submit">Send</button>
+      </form> 
+    --></div>
+    <div id="data"></div>
+    <script>
+      // Connect to the WebSocket endpoint
+      const socket = new SockJS("wss://hehehaha");
+      const stompClient = Stomp.over(socket);
+
+      stompClient.connect({}, () => {
+        stompClient.subscribe("/topic/hahahehe", (data) => {
+          showMessage(JSON.parse(data.body).value);
+        });
+      });
+
+      // Earlier interation with a form:
+      // const messageForm = document.getElementById("messageForm");
+      // const messageInput = document.getElementById("messageInput");
+      const messagesDiv = document.getElementById("data");
+
+      // Earlier interation with form that sent data to ws server:
+      // messageForm.addEventListener("submit", (event) => {
+      //   event.preventDefault();
+      //   const data = messageInput.value;
+      //   stompClient.send("/app/chart", {}, JSON.stringify({ value: data }));
+      //   messageInput.value = "";
+      // });
+
+      function showMessage(data) {
+        const p = document.createElement("p");
+        p.textContent = data;
+        messagesDiv.appendChild(p);
+      }
+    </script>
+  </body>
+</html>

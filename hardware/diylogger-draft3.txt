@@ -1,0 +1,92 @@
+#include <Arduino.h>
+
+#include <WiFi.h>
+#include <WiFiClientSecure.h>
+
+#include <WebSocketsClient.h>
+
+const char* SSID = "SSID";
+const char* passpasspass = "Password";
+const int photoresistorPin = 36; // ADC pin for the photoresistor
+
+WebSocketsClient webSocket;
+
+#define USE_SERIAL Serial1
+
+void hexdump(const void *mem, uint32_t len, uint8_t cols = 16) {
+	const uint8_t* src = (const uint8_t*) mem;
+	USE_SERIAL.printf("\n[HEXDUMP] Address: 0x%08X len: 0x%X (%d)", (ptrdiff_t)src, len, len);
+	for(uint32_t i = 0; i < len; i++) {
+		if(i % cols == 0) {
+			USE_SERIAL.printf("\n[0x%08X] 0x%08X: ", (ptrdiff_t)src, i);
+		}
+		USE_SERIAL.printf("%02X ", *src);
+		src++;
+	}
+	USE_SERIAL.printf("\n");
+}
+
+void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
+	switch(type) {
+		case WStype_DISCONNECTED:
+			Serial.printf("[WSc] Disconnected!\n");
+			break;
+		case WStype_CONNECTED:
+			Serial.printf("[WSc] Connected to url: %s\n", payload);
+
+			// send message to server when Connected
+			// webSocket.sendTXT("Connected");
+			break;
+		case WStype_TEXT:
+			Serial.printf("[WSc] get text: %s\n", payload);
+
+			// send message to server
+			// webSocket.sendTXT("message here");
+			break;
+		case WStype_BIN:
+			Serial.printf("[WSc] get binary length: %u\n", length);
+			hexdump(payload, length);
+
+			// send data to server
+			// webSocket.sendBIN(payload, length);
+			break;
+		case WStype_ERROR:			
+		case WStype_FRAGMENT_TEXT_START:
+		case WStype_FRAGMENT_BIN_START:
+		case WStype_FRAGMENT:
+		case WStype_FRAGMENT_FIN:
+			break;
+	}
+
+}
+
+void setup() {
+	Serial.begin(115200);
+
+	WiFi.begin(SSID, passpasspass);
+
+	//WiFi.disconnect();
+	while(WiFi.status() != WL_CONNECTED) {
+		delay(1000);
+    Serial.println("Connecting to WiFi...");
+	}
+
+  Serial.println("Connected to Wifi");
+
+	// server address, port and URL
+	webSocket.begin("https://zxc.ngrok-free.app", 443, "/ws");
+
+	// event handler
+	webSocket.onEvent(webSocketEvent);
+
+	// use HTTP Basic Authorization this is optional remove if not needed
+	webSocket.setAuthorization("name", "pwd");
+
+	// try ever 5000 again if connection has failed
+	webSocket.setReconnectInterval(1000);
+
+}
+
+void loop() {
+	webSocket.loop();
+}
