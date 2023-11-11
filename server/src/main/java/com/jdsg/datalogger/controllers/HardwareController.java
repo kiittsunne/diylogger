@@ -2,7 +2,7 @@ package com.jdsg.datalogger.controllers;
 
 import com.jdsg.datalogger.dto.ChartData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HardwareController {
     @Autowired
-    SimpMessagingTemplate messagingTemplate;
+    private KafkaTemplate<String, ChartData> kafkaTemplate;
 
-    // Bridges REST hardware-server layer to WS server-frontend client layer
+    private static final String TOPIC = "sensor-data-topic";
     @PostMapping("/in")
     public void receivePhotoresistorValue(@RequestBody ChartData data) {
+        kafkaTemplate.send(TOPIC, data);
 
-        // TODO: Sensor connection sanity check. Remove in final ver.
-        System.out.println("Received photoresistor value: " + data.getValue());
-        messagingTemplate.convertAndSend("/topic/data", data);
+        // TODO: replace with logging
+        System.out.println(data.getSensorId() + ": " + data.getValue());
     }
 }
