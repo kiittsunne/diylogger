@@ -57,5 +57,17 @@ public class KafkaConfig {
         return new KafkaTemplate<>(producerFactory());
     }
 
+//    @Bean
+//    public KafkaStreams kafkaStreams(StreamsBuilder streamsBuilder) {
+//        return new KafkaStreams(streamsBuilder.build(), kafkaStreamsConfig());
+//    }
+//
+//    @Bean
+//    public Properties kafkaStreamsConfig() {
+//        Properties properties = new Properties();
+//        properties.put(StreamsConfig.APPLICATION_ID_CONFIG, "my-streams-app");
+//        properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+//        return properties;
+//    }
 
 }
