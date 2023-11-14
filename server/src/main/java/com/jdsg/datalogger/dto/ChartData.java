@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
 
 @JsonDeserialize
 @JsonSerialize
@@ -14,7 +13,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChartData {
-    private int value;
+    private Double value;
     private String sensorId;
     private String timeStamp;
 }

@@ -22,4 +22,8 @@ public class KafkaConsumer {
         messagingTemplate.convertAndSend("/topic/data", data);
     }
 
+    @KafkaListener(topics = "chartdata-output", groupId = "my-count", containerFactory = "kafkaListenerStreamContainerFactory")
+    public void printCount(ConsumerRecord<String, Long> record) {
+        System.out.println("Key: " + record.key() + " | Count: " + record.value());
+    }
 }

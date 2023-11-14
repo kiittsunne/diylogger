@@ -18,6 +18,6 @@ public class HardwareController {
         kafkaTemplate.send(TOPIC, data);
 
         // TODO: replace with logging
-        System.out.println(data.getSensorId() + ": " + data.getValue());
+//        System.out.println(data.getSensorId() + ": " + data.getValue());
     }
 }

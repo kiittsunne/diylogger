@@ -2,6 +2,7 @@
 #include <WiFiClient.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
+#include <RTClib.h>
 
 const char* ssid = "ssid";
 const char* password = "password";
@@ -10,6 +11,7 @@ const char* serverAddress = "https://ngrok/in";
 const char* contentType = "application/json"; // Content-Type for JSON
 
 HTTPClient http;
+RTC_DS3231 rtc;
 
 void setup() {
   Serial.begin(115200);
@@ -27,10 +29,13 @@ void loop() {
   if (WiFi.status() == WL_CONNECTED) {
     http.begin(serverAddress);
     http.addHeader("Content-Type", contentType);
+    DateTime now = rtc.now();
 
     // Create a JSON document
     StaticJsonDocument<64> jsonDoc;
     jsonDoc["value"] = analogRead(photoresistorPin);
+    jsonDoc["sensorId"] = "a-01";
+    jsonDoc["timeStamp"] = String(now.hour()) + ":" + String(now.minute()) + ":" + String(now.second());
 
     // Serialize JSON to a String
     String jsonData;
